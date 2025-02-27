@@ -1,17 +1,17 @@
-package com.food.ordering.domain.entity;
+package com.food.ordering.system.domain.entity;
 
 import java.util.Objects;
 
 public abstract class BaseEntity<ID> {
 
-    private ID id;
+    private ID OrderId;
 
     public ID getId() {
-        return id;
+        return OrderId;
     }
 
     public void setId(ID id) {
-        this.id = id;
+        this.OrderId = id;
     }
 
 
@@ -19,11 +19,11 @@ public abstract class BaseEntity<ID> {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity<?> that = (BaseEntity<?>) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(OrderId, that.OrderId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(OrderId);
     }
 }

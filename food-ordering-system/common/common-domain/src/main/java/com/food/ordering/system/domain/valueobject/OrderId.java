@@ -1,6 +1,4 @@
-package com.food.ordering.domain.valueobject;
-
-import com.food.ordering.domain.entity.BaseEntity;
+package com.food.ordering.system.domain.valueobject;
 
 import java.util.UUID;
 

@@ -1,13 +1,17 @@
-package com.food.ordering.domain.valueobject;
+package com.food.ordering.system.domain.valueobject;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
+import static java.math.BigDecimal.*;
+
 public class Money {
 
     //final por que los value objects son inmutables
     private final BigDecimal amount;
+
+    public static final Money ZERO = new Money(BigDecimal.ZERO);
 
     public Money(BigDecimal amount) {
         this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
@@ -19,7 +23,6 @@ public class Money {
         return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
     }
 
-
     public boolean isGreatherThan(Money money) {
         return this.amount != null && this.amount.compareTo(money.getAmount()) > 0;
     }
@@ -30,6 +33,14 @@ public class Money {
 
     public Money substract(Money money) {
         return new Money(money.amount.subtract(this.amount));
+    }
+
+    public Money multiply(BigDecimal multiplier) {
+        return new Money(this.amount.multiply(multiplier));
+    }
+
+    public Money multiply(Integer multiplier) {
+        return new Money(this.amount.multiply(BigDecimal.valueOf(multiplier)));
     }
 
     public BigDecimal getAmount() {
