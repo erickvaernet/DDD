@@ -10,6 +10,8 @@ import com.food.ordering.system.order.service.domain.valueobject.TrackingId;
 import java.util.List;
 import java.util.UUID;
 
+import static com.food.ordering.system.domain.valueobject.OrderStatus.*;
+
 public class Order extends AggregateRoot<OrderId> {
 
     private final CustomerId customerId;
@@ -37,7 +39,7 @@ public class Order extends AggregateRoot<OrderId> {
     public void initializeOrder(){
         setId(new OrderId(UUID.randomUUID()));
         trackingId = new TrackingId(UUID.randomUUID());
-        orderStatus = OrderStatus.PENDING;
+        orderStatus = PENDING;
         initializeOrderItems();
 
     }
@@ -46,6 +48,45 @@ public class Order extends AggregateRoot<OrderId> {
         validateInitialOrder();
         validateTotalPrice();
         validateItemsPrice();
+    }
+
+    public void pay(){
+        if (!orderStatus.equals(PENDING)){
+            throw new OrderDomainException("Order is not in correct state for pay operataion");
+        }
+        orderStatus = PAID;
+    }
+
+    public  void approve(){
+        if (!orderStatus.equals(PAID)){
+            throw new OrderDomainException("Order is not in correct state for approve operataion");
+        }
+        orderStatus = APPROVED;
+    }
+
+    public void initCancel(List<String> failureMessages){
+        if (!orderStatus.equals(PAID)){
+            throw new OrderDomainException("Order is not in correct state for initCancel operataion");
+        }
+        orderStatus = CANCELLING;
+        updateFailureMessages(failureMessages);
+    }
+
+    private void updateFailureMessages(List<String> failureMessages) {
+        if (this.failureMessages != null && failureMessages!=null ) {
+            this.failureMessages.addAll(failureMessages.stream().filter(failureMessage -> !failureMessage.isEmpty()).toList());
+        }
+        if(this.failureMessages == null ){
+            this.failureMessages=failureMessages;
+        }
+    }
+
+    public void cancel(List<String> failureMessages){
+        if (!orderStatus.equals(CANCELLING)){
+            throw new OrderDomainException("Order is not in correct state for cancel operataion");
+        }
+        orderStatus = CANCELLED;
+        updateFailureMessages(failureMessages);
     }
 
     private void validateItemsPrice() {
