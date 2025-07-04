@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public abstract class BaseEntity<ID> {
 
-    private ID OrderId;
+    protected ID id;
 
     public ID getId() {
-        return OrderId;
+        return id;
     }
 
     public void setId(ID id) {
-        this.OrderId = id;
+        this.id = id;
     }
 
 
@@ -19,11 +19,11 @@ public abstract class BaseEntity<ID> {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity<?> that = (BaseEntity<?>) o;
-        return Objects.equals(OrderId, that.OrderId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(OrderId);
+        return Objects.hashCode(id);
     }
 }
